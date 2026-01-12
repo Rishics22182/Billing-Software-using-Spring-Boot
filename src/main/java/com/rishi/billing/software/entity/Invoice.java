@@ -3,35 +3,43 @@ package com.rishi.billing.software.entity;
 import java.time.LocalDate;
 
 public class Invoice {
-    private Long invoiceId;
-    private LocalDate invoiceDate = LocalDate.now();
+    private long invoiceId;
+    private LocalDate invoiceDate;
+    private Customer customer;
     private double totalAmount;
     private double totalTax;
-    private double discount;
-    private double finalAmount;
+    private double discout;
+    private  double finalAmount;
 
-    public Long getInvoiceId() {
-        return invoiceId;
+    public Invoice() {
+        this.invoiceId = System.currentTimeMillis();
+        this.invoiceDate = LocalDate.now();
     }
 
-    public void setInvoiceId(Long invoiceId) {
-        this.invoiceId = invoiceId;
-    }
-
-    public LocalDate getInvoiceDate() {
-        return invoiceDate;
-    }
-
-    public void setInvoiceDate(LocalDate invoiceDate) {
-        this.invoiceDate = invoiceDate;
-    }
-
-    public double getTotalAmount() {
-        return totalAmount;
-    }
-
-    public void setTotalAmount(double totalAmount) {
+    public Invoice(Customer customer, double totalAmount, double totalTax, double discout, double finalAmount) {
+        this.invoiceId = System.currentTimeMillis();
+        this.invoiceDate = LocalDate.now();
+        this.customer = customer;
         this.totalAmount = totalAmount;
+        this.totalTax = totalTax;
+        this.discout = discout;
+        this.finalAmount = finalAmount;
+    }
+
+    public double getFinalAmount() {
+        return finalAmount;
+    }
+
+    public void setFinalAmount(double finalAmount) {
+        this.finalAmount = finalAmount;
+    }
+
+    public double getDiscout() {
+        return discout;
+    }
+
+    public void setDiscout(double discout) {
+        this.discout = discout;
     }
 
     public double getTotalTax() {
@@ -42,19 +50,27 @@ public class Invoice {
         this.totalTax = totalTax;
     }
 
-    public double getDiscount() {
-        return discount;
+    public double getTotalAmount() {
+        return totalAmount;
     }
 
-    public void setDiscount(double discount) {
-        this.discount = discount;
+    public void setTotalAmount(double totalAmount) {
+        this.totalAmount = totalAmount;
     }
 
-    public double getFinalAmount() {
-        return finalAmount;
+    public Customer getCustomer() {
+        return customer;
     }
 
-    public void setFinalAmount(double finalAmount) {
-        this.finalAmount = finalAmount;
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
+    public long getInvoiceId() {
+        return invoiceId;
+    }
+
+    public LocalDate getInvoiceDate() {
+        return invoiceDate;
     }
 }
