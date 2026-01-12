@@ -41,7 +41,7 @@ public class ProductController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Product> updatePrice_stock(@PathVariable int id, @RequestBody double price, @RequestBody int stock) {
+    public ResponseEntity<Product> updatePrice_stock(@PathVariable int id, @RequestParam double price, @RequestParam int stock) {
         try {
             return ResponseEntity.ok(productService.updatePrice_stock(id, price, stock));
         } catch (Exception e) {
@@ -67,6 +67,5 @@ public class ProductController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to delete.");
         }
     }
-
 
 }

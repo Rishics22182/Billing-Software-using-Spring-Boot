@@ -7,13 +7,6 @@ public class Product {
     private double gstPercentage;
     private int stockQuantity;
 
-    public Product(int id, String name, double price, double gstPercentage, int stockQuantity) {
-        this.id = id;
-        this.name = name;
-        this.price = price;
-        this.gstPercentage = gstPercentage;
-        this.stockQuantity = stockQuantity;
-    }
 
     public int getId() {
         return id;
