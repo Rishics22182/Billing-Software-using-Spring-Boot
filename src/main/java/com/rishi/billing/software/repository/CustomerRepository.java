@@ -1,37 +1,72 @@
 package com.rishi.billing.software.repository;
 
 import com.rishi.billing.software.entity.Customer;
-import com.rishi.billing.software.entity.Product;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Repository
 public class CustomerRepository {
-    private final List<Customer> clist = new ArrayList<>();
 
+    private final JdbcTemplate jdbcTemplate;
+
+    public CustomerRepository(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
+
+    private final RowMapper<Customer> customerRowMapper = (rs, rowNum) -> {
+        Customer c = new Customer();
+        c.setId(rs.getInt("id"));
+        c.setName(rs.getString("name"));
+        c.setPhone(rs.getInt("phone"));
+        c.setEmail(rs.getString("email"));
+        c.setAddress(rs.getString("address"));
+        return c;
+    };
+
+    // Add Customer
     public Customer addCustomer(Customer customer){
-        clist.add(customer);
+        String sql = "INSERT INTO customer(id,name, phone, email, address) VALUES (?,?,?,?,?)";
+        jdbcTemplate.update(
+                sql,
+                customer.getId(),
+                customer.getName(),
+                customer.getPhone(),
+                customer.getEmail(),
+                customer.getAddress()
+        );
         return customer;
     }
 
-    public Customer updateCustomer(int id ,Customer customer){
-        Customer updateCustomer = getCustomerById(id);
-        if(updateCustomer != null){
-            updateCustomer.setName(customer.getName());
-            updateCustomer.setPhone(customer.getPhone());
-            updateCustomer.setEmail(customer.getEmail());
-            updateCustomer.setAddress(customer.getAddress());
-        }
-        return updateCustomer;
+    // Update Customer
+    public Customer updateCustomer(int id, Customer customer){
+        String sql = "UPDATE customer SET name=?, phone=?, email=?, address=? WHERE id=?";
+        jdbcTemplate.update(
+                sql,
+                customer.getName(),
+                customer.getPhone(),
+                customer.getEmail(),
+                customer.getAddress(),
+                id
+        );
+        return getCustomerById(id);
     }
 
-    public List<Customer> getAllCustomer(){
-        return clist;
-    }
-
+    // Get Customer by ID
     public Customer getCustomerById(int id){
-        return clist.stream().filter(c -> c.getId() == id).findFirst().orElse(null);
+        String sql = "SELECT id, name, phone, email, address FROM customer WHERE id = ?";
+        return jdbcTemplate.query(sql, customerRowMapper, id)
+                .stream()
+                .findFirst()
+                .orElse(null);
     }
+
+    // Get All Customers
+    public List<Customer> getAllCustomer(){
+        String sql = "SELECT id, name, phone, email, address FROM customer";
+        return jdbcTemplate.query(sql, customerRowMapper);
+    }
+
 }
