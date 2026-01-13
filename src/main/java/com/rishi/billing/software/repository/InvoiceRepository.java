@@ -62,7 +62,7 @@ public class InvoiceRepository {
         double totalTax = 0.0;
         double totalDiscount = 0.0;
 
-        // 1) Har item ke liye: price DB se, taxAmount/discount user se
+
         for (InvoiceItem item : invoiceRequestDTO.getItems()) {
 
             int productId = item.getProduct().getId();
@@ -75,8 +75,8 @@ public class InvoiceRepository {
             double price = product.getPrice();
             double lineAmount = price * qty;
 
-            double taxAmount = item.getTaxAmount();      // user se
-            double discountAmount = item.getDiscount();  // user se
+            double taxAmount = item.getTaxAmount();
+            double discountAmount = item.getDiscount();
             double lineTotal = lineAmount + taxAmount - discountAmount;
 
             totalAmount += lineAmount;
@@ -89,24 +89,22 @@ public class InvoiceRepository {
             item.setTotal(lineTotal);
         }
 
-        // 2) Invoice object + totals
-        Invoice invoice = new Invoice(); // constructor se invoiceId / date set ho jayega
+        Invoice invoice = new Invoice();
         invoice.setCustomer(invoiceRequestDTO.getCustomer());
         invoice.setTotalAmount(totalAmount);
         invoice.setTotalTax(totalTax);
         invoice.setDiscout(totalDiscount);
         invoice.setFinalAmount(totalAmount + totalTax - totalDiscount);
 
-        // 3) invoice table me insert
         String invoiceSql =
                 "INSERT INTO invoice (invoice_id, invoice_date, customer_id, total_amount, total_tax, discount, final_amount) " +
                         "VALUES (?,?,?,?,?,?,?)";
 
         jdbcTemplate.update(
                 invoiceSql,
-                invoice.getInvoiceId(),                     // invoice_id
-                Date.valueOf(invoice.getInvoiceDate()),     // invoice_date
-                invoice.getCustomer().getId(),              // customer_id
+                invoice.getInvoiceId(),
+                Date.valueOf(invoice.getInvoiceDate()),
+                invoice.getCustomer().getId(),
                 invoice.getTotalAmount(),
                 invoice.getTotalTax(),
                 invoice.getDiscout(),
@@ -115,7 +113,6 @@ public class InvoiceRepository {
 
         long invoiceId = invoice.getInvoiceId();
 
-        // 4) invoice_item table me insert
         String itemSql =
                 "INSERT INTO invoice_item " +
                         "(invoice_id, product_id, quantity, price, tax_amount, total, discount) " +

@@ -1,10 +1,8 @@
 package com.rishi.billing.software.repository;
-
 import com.rishi.billing.software.entity.Customer;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
-
 import java.util.List;
 
 @Repository
