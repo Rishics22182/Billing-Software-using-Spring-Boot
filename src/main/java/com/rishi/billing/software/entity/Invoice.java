@@ -73,4 +73,12 @@ public class Invoice {
     public LocalDate getInvoiceDate() {
         return invoiceDate;
     }
+
+    public void setInvoiceId(long invoiceId) {
+        this.invoiceId = invoiceId;
+    }
+
+    public void setInvoiceDate(LocalDate invoiceDate) {
+        this.invoiceDate = invoiceDate;
+    }
 }
